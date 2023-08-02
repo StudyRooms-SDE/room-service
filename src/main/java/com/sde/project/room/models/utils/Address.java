@@ -1,4 +1,4 @@
-package com.sde.project.room.models;
+package com.sde.project.room.models.utils;
 
 public record Address(
         String name,

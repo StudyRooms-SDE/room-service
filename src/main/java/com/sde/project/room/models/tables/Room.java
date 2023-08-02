@@ -1,10 +1,11 @@
-package com.sde.project.room.models;
+package com.sde.project.room.models.tables;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "room")
+@Table(name = "rooms")
 @Entity(name = "room")
 public class Room {
     @Id
@@ -54,5 +55,18 @@ public class Room {
 
     public void setBuilding(String building) {
         this.building = building;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Room room = (Room) o;
+        return Objects.equals(id, room.id) && Objects.equals(name, room.name) && Objects.equals(building, room.building) && Objects.equals(description, room.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, building, description);
     }
 }

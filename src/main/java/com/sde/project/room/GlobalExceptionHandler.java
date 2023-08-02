@@ -1,6 +1,6 @@
 package com.sde.project.room;
 
-import com.sde.project.room.models.ExceptionResponse;
+import com.sde.project.room.models.responses.ExceptionResponse;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

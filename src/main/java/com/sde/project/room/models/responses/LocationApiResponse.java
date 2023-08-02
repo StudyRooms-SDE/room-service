@@ -1,6 +1,6 @@
-package com.sde.project.room.models;
+package com.sde.project.room.models.responses;
 
-import java.util.Map;
+import com.sde.project.room.models.utils.Address;
 
 public record LocationApiResponse(
         String place_id,

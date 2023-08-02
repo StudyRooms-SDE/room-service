@@ -1,15 +1,18 @@
 package com.sde.project.room.controllers;
 
-import com.sde.project.room.models.LocationApiResponse;
-import com.sde.project.room.models.Room;
-import com.sde.project.room.models.RoomDetailsResponse;
-import com.sde.project.room.models.RoomResponse;
+import com.sde.project.room.models.responses.LocationApiResponse;
+import com.sde.project.room.models.responses.OpeningHoursResponse;
+import com.sde.project.room.models.responses.RoomDetailsResponse;
+import com.sde.project.room.models.responses.RoomResponse;
+import com.sde.project.room.models.tables.OpeningHours;
+import com.sde.project.room.models.tables.Room;
 import com.sde.project.room.services.LocationService;
 import com.sde.project.room.services.RoomService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,6 +37,19 @@ public class RoomController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping(path = "/rooms/opening_hours")
+    @ResponseStatus(HttpStatus.OK)
+    public List<OpeningHoursResponse> getOpeningHours() {
+        List<OpeningHours> openingHours = roomService.getOpeningHours();
+
+        // Group the opening hours by study room
+        Map<Room, List<OpeningHours>> map = openingHours.stream().collect(Collectors.groupingBy(OpeningHours::getRoom));
+
+        return map.entrySet().stream()
+                .map(entry -> new OpeningHoursResponse().build(entry.getKey(), entry.getValue()))
+                .toList();
+    }
+
     @GetMapping(path = "/rooms/{id}")
     @ResponseStatus(HttpStatus.OK)
     public RoomDetailsResponse getRoomById(@PathVariable UUID id) {
@@ -48,5 +64,13 @@ public class RoomController {
                 Double.valueOf(locationApiResponse.lat()),
                 Double.valueOf(locationApiResponse.lon()),
                 locationApiResponse.address().road() + " " + locationApiResponse.address().house_number() + ", " + locationApiResponse.address().city());
+    }
+
+    @GetMapping(path = "/rooms/{id}/opening_hours")
+    @ResponseStatus(HttpStatus.OK)
+    public OpeningHoursResponse getRoomOpeningHours(@PathVariable UUID id) {
+        List<OpeningHours> openingHours = roomService.getRoomOpeningHours(id);
+        Room room = roomService.getRoomById(id);
+        return new OpeningHoursResponse().build(room, openingHours);
     }
 }

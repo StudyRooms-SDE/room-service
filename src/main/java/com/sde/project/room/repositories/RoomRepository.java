@@ -1,6 +1,6 @@
 package com.sde.project.room.repositories;
 
-import com.sde.project.room.models.Room;
+import com.sde.project.room.models.tables.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
