@@ -1,5 +1,7 @@
 package com.sde.project.room.models;
 
+import java.util.Map;
+
 public record LocationApiResponse(
         String place_id,
         String licence,
@@ -12,5 +14,6 @@ public record LocationApiResponse(
         String class_,
         String type,
         Double importance,
-        String icon
+        String icon,
+        Address address
 ) {}

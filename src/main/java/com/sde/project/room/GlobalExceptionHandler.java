@@ -37,7 +37,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(responseBody, new HttpHeaders(), HttpStatus.CONFLICT);
     }
 
-    @ExceptionHandler(value = {PermissionDeniedDataAccessException.class, AccessDeniedException.class})
+    @ExceptionHandler(value = {PermissionDeniedDataAccessException.class, AccessDeniedException.class, IllegalAccessError.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ApiResponse(content = @Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = "application/json"))
     protected ResponseEntity<Object> handlePermissionDenied(RuntimeException ex, WebRequest request) {
@@ -63,7 +63,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(responseBody, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {Exception.class, RuntimeException.class, IllegalStateException.class})
+    @ExceptionHandler(value = {IllegalArgumentException.class, IllegalStateException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ApiResponse(responseCode = "400", content = @Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = "application/json"))
+    protected ResponseEntity<Object> handleBadRequest(RuntimeException ex, WebRequest request) {
+        ExceptionResponse responseBody = new ExceptionResponse(Instant.now().toString(),
+                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                ex.getMessage(),
+                request.getDescription(false));
+
+        return new ResponseEntity<>(responseBody, new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {Exception.class, RuntimeException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ApiResponse(content = @Content(schema = @Schema(implementation = ExceptionResponse.class), mediaType = "application/json"))
     protected ResponseEntity<Object> handleOtherExceptions(RuntimeException ex, WebRequest request) {

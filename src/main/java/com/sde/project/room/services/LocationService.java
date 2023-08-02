@@ -13,9 +13,15 @@ public class LocationService {
     @Value("${geo.api.key}")
     private String key;
 
-    public LocationApiResponse getLocation(String description) {
-        String formattedDescription = description.replaceAll(" ", "%");
-        String url = String.format("https://eu1.locationiq.com/v1/search?key=%s&q=%s&format=json", key, formattedDescription);
+    public LocationApiResponse getLocation(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be empty");
+        }
+        String formattedDescription = name.replaceAll(" ", "%");
+        String url = String.format(
+                "https://eu1.locationiq.com/v1/search?key=%s&q=%s&format=json&addressdetails=1&normalizeaddress=1&normalizecity=1",
+                key,
+                formattedDescription);
         RestTemplate restTemplate = new RestTemplate();
         return Objects.requireNonNull(restTemplate.getForObject(url, LocationApiResponse[].class))[0];
     }

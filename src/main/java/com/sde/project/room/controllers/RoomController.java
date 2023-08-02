@@ -38,14 +38,15 @@ public class RoomController {
     @ResponseStatus(HttpStatus.OK)
     public RoomDetailsResponse getRoomById(@PathVariable UUID id) {
         Room room = roomService.getRoomById(id);
-        LocationApiResponse locationApiResponse = locationService.getLocation(room.getDescription());
+        LocationApiResponse locationApiResponse = locationService.getLocation(room.getBuilding());
 
-        return new RoomDetailsResponse(room.getId().toString(),
+        return new RoomDetailsResponse(
+                room.getId().toString(),
                 room.getName(),
                 room.getBuilding(),
                 room.getDescription(),
                 Double.valueOf(locationApiResponse.lat()),
                 Double.valueOf(locationApiResponse.lon()),
-                locationApiResponse.display_name());
+                locationApiResponse.address().road() + " " + locationApiResponse.address().house_number() + ", " + locationApiResponse.address().city());
     }
 }
