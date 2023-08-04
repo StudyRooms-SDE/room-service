@@ -52,7 +52,14 @@ public class RoomController {
 
     @GetMapping(path = "/rooms/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public RoomDetailsResponse getRoomById(@PathVariable UUID id) {
+    public RoomResponse getRoomById(@PathVariable UUID id) {
+        Room room = roomService.getRoomById(id);
+        return new RoomResponse(room.getId().toString(), room.getName(), room.getBuilding(), room.getDescription());
+    }
+
+    @GetMapping(path = "/rooms/{id}/details")
+    @ResponseStatus(HttpStatus.OK)
+    public RoomDetailsResponse getRoomDetailsById(@PathVariable UUID id) {
         Room room = roomService.getRoomById(id);
         LocationApiResponse locationApiResponse = locationService.getLocation(room.getBuilding());
 
