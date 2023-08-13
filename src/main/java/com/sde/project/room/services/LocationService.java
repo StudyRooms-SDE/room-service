@@ -10,7 +10,7 @@ import java.util.Objects;
 @Service
 public class LocationService {
 
-    @Value("${geo.api.key}")
+    @Value("${geocoding.api.key}")
     private String key;
 
     public LocationApiResponse getLocation(String name) {
