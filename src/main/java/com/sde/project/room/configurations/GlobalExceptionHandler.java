@@ -1,4 +1,4 @@
-package com.sde.project.room;
+package com.sde.project.room.configurations;
 
 import com.sde.project.room.models.responses.ExceptionResponse;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
